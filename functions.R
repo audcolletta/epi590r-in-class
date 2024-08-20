@@ -145,6 +145,10 @@ new_table_function <- function(model) {
 		) ,tidy_fun = partial(tidy_robust, vcov = "HC1")
 	)
 }
+#robust standard error addresses homoscedasicity maybe
+#HC1 is just a specific calculation
 new_table_function(logistic_model)
 new_table_function(poisson_model)
 new_table_function(logbinomial_model)
+install.packages("renv")
+renv::init()
