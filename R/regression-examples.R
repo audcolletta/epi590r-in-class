@@ -15,7 +15,8 @@ nlsy <- read_csv(here::here("data", "raw", "nlsy.csv"),
 
 
 # Univariate regression
-
+install.packages("broom.helpers")
+library(broom.helpers)
 tbl_uvregression(
 	nlsy,
 	y = income,
@@ -95,3 +96,23 @@ tbl_int <- tbl_regression(
 
 tbl_merge(list(tbl_no_int, tbl_int),
 					tab_spanner = c("**Model 1**", "**Model 2**"))
+
+tbl_uvregression(
+	nlsy,
+	x = sex_cat,
+	include = c(income, nsibs, sleep_wkdy, sleep_wknd),
+	method = lm)
+poisson_model <- glm(nsibs ~ income + sleep_wkdy + sleep_wknd,
+										 data = nlsy,
+										 family = poisson())
+tbl_regression(
+	poisson_model,
+	exponentiate = TRUE,
+	label = list(
+		sleep_wknd ~ "Weekend Sleep",
+		sleep_wkdy ~ "Weeknight Sleep",
+		income ~ "Income"
+	))
+logbinomial_model <- glm(nsibs ~ income + sleep_wkdy + sleep_wknd,
+										 data = nlsy,
+										 family = binomial(link = "log"))

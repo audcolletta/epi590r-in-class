@@ -1,4 +1,5 @@
 library(tidyverse)
+library(dplyr)
 library(broom)
 
 nlsy_cols <- c("glasses", "eyesight", "sleep_wkdy", "sleep_wknd",

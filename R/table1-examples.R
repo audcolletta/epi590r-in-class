@@ -19,8 +19,11 @@ nlsy <- read_csv(here::here("data", "raw", "nlsy.csv"),
 tbl_summary(
 	nlsy,
 	by = sex_cat,
-	include = c(sex_cat, race_eth_cat, region_cat,
-							eyesight_cat, glasses, age_bir))
+	include = c(sex_cat, race_eth_cat, region_cat, income,
+							eyesight_cat, glasses, age_bir, starts_with("sleep"))
+	statistic = list(
+		variable.names( ~ c())
+	)
 
 
 tbl_summary(
@@ -55,5 +58,29 @@ tbl_summary(
 	add_overall(col_label = "**Total**") |>
 	bold_labels() |>
 	modify_footnote(update = everything() ~ NA) |>
-	modify_header(label = "**Variable**", p.value = "**P**")
+	modify_header(label = "**Variable**", p.value = "**P**") |>
+ list(income ~ "min = {p10}; max = {p90}")
+
+
+
+tbl_summary(
+	nlsy,
+	by = sex_cat,
+	include = c(race_eth_cat, region_cat, income,
+							 starts_with("sleep")),
+statistic = list(
+	income ~ "p10 = {p10}, p90 ={p90}",
+starts_with("sleep") ~ "max = {min}, min ={max}"),
+	digits = list(
+		income~ c(3,3),
+		starts_with("sleep") ~ c(1,1)
+	)
+) |>
+	modify_table_styling(
+		columns = label,
+		rows = label == "race_eth_cat",
+		footnote = "https://www.nlsinfo.org/content/cohorts/nlsy79/topical-guide/household/race-ethnicity-immigration-data"
+)
+
+
 
